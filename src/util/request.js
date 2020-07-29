@@ -2,12 +2,12 @@ import axios from "axios"
 import qs from "qs"
 
 //请求拦截
-// axios.interceptors.request.use(config => {
-//     if (config.url != baseUrl + '/api/userlogin') {
-//         config.headers.authorization = store.state.user.token;
-//     }
-//     return config
-// })
+axios.interceptors.request.use(config => {
+    if (config.url != baseUrl + '/api/userlogin') {
+        config.headers.authorization = store.state.user.token;
+    }
+    return config
+})
 
 //响应拦截
 axios.interceptors.response.use(res => {
@@ -15,11 +15,11 @@ axios.interceptors.response.use(res => {
     console.log(res)
     console.groupEnd()
 
-    // if(res.data.msg==="登录已过期或访问权限受限"){
-    //     warningAlert("登录已过期或访问权限受限")
-    //     router.push("/login");
-    //     return;
-    // }
+    if(res.data.msg==="登录已过期或访问权限受限"){
+        warningAlert("登录已过期或访问权限受限")
+        router.push("/login");
+        return;
+    }
     return res;
 })
 

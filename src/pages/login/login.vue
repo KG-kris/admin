@@ -34,7 +34,7 @@ export default {
             if(res.data.code===200){
               //登录成功
               successAlert("登录成功")
-              //vuex保存了用户信息
+              //vuex保存用户信息
               this.changeUser(res.data.list)
               //跳转页面
               this.$router.push("/home")
