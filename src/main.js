@@ -3,6 +3,9 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+//引入echarts数据图表
+import echarts from 'echarts'
+Vue.prototype.$echarts = echarts
 
 //1.引入reset.css 
 import "./assets/css/reset.css"
