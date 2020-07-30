@@ -29,7 +29,7 @@ export default {
       "changeUser":"changeUser"
     }),
       login(){
-          // this.$router.push("/")
+          this.$router.push("/index")
           requestLogin(this.user).then(res=>{
             if(res.data.code===200){
               //登录成功

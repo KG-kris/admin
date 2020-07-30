@@ -17,7 +17,7 @@
       <el-table-column prop="url" label="菜单地址"></el-table-column>
       <el-table-column label="状态">
         <template slot-scope="scope">
-          <el-button type="primary" v-if="scope.row.status==1">启用</el-button>
+          <el-button type="success" v-if="scope.row.status==1">启用</el-button>
           <el-button type="info" v-else>禁用</el-button>
         </template>
       </el-table-column>
@@ -25,7 +25,6 @@
         <template slot-scope="scope">
           <el-button type="primary" @click="edit(scope.row.id)">编辑</el-button>
           <el-button type="danger" @click="del(scope.row.id)">删除</el-button>
-          <!-- <del-btn @confirm="dele(scope.row.id)"></del-btn> -->
         </template>
       </el-table-column>
     </el-table>

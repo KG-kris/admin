@@ -1,42 +1,48 @@
 <template>
   <div>
     <el-button type="primary" @click="add">添加</el-button>
+    <!-- 添加 -->
     <v-add :info="info" ref="add"></v-add>
-    <v-list @edit="edit"></v-list>
+    <!-- 列表 -->
+    <v-list @edit='edit($event)'></v-list>
   </div>
 </template>
+
 <script>
 import vAdd from "./components/add";
 import vList from "./components/list";
 export default {
   components: {
-    vList,
     vAdd,
+    vList
   },
   data() {
     return {
+      //添加弹框的信息
       info: {
-        show: false,
-        title: "轮播图添加",
-        isAdd: true,
-      },
+        show: false,//是否展示
+        isEdit: false,//是否是编辑
+        title: "添加轮播图",
+      }
     };
   },
-  methods: {
-    add() {
-      this.info.show = true;
-      this.info.title = "轮播图添加";
-      this.info.isAdd = true;
+  methods:{
+    //添加
+    add(){
+      this.info.show=true;
+      this.info.title="添加轮播图"
+      this.info.isEdit=false
     },
-    edit(id) {
-      this.info.show = true;
-      this.info.title = "轮播图编辑";
-      this.info.isAdd = false;
-      this.$refs.add.getDetail(id);
-    },
-  },
-  mounted() {},
+    //编辑
+    edit(id){
+      this.info.show=true;
+      this.info.title="编辑轮播图";
+      this.info.isEdit=true
+      this.$refs.add.getDetail(id)
+    }
+  }
 };
 </script>
+
 <style scoped>
 </style>

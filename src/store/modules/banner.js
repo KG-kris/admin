@@ -1,25 +1,25 @@
-import { requestBannerList } from "../../util/request"
-
+import {requestBannerList} from "../../util/request"
 const state = {
     list: []
+
 }
 
 const mutations = {
-    changeBannerList(state, arr) {
-        state.list = arr
+    changeList(state, list) {
+        state.list = list
     }
 }
 
 const actions = {
-    requestBannerList(context) {
-        requestBannerList().then(res => {
-            context.commit("changeBannerList", res.data.list)
+    requestList({ commit }) {
+        requestBannerList().then(res=>{
+            commit("changeList",res.data.list)
         })
     }
 }
 
 const getters = {
-    list(state) {
+    list(state){
         return state.list
     }
 }

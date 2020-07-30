@@ -1,24 +1,29 @@
-import { requestVipList } from "../../util/request"
+import {requestMemberList} from "../../util/request"
 const state = {
     list: []
+
 }
+
 const mutations = {
-    changeVipList(state, arr) {
-        state.list = arr
+    changeList(state, list) {
+        state.list = list
     }
 }
+
 const actions = {
-    requestVipList(context) {
-        requestVipList().then(res => {
-            context.commit("changeVipList", res.data.list)
+    requestList({ commit } ) {
+        requestMemberList().then(res=>{
+            commit("changeList",res.data.list)
         })
     }
 }
+
 const getters = {
-    list(state) {
+    list(state){
         return state.list
     }
 }
+
 export default {
     state,
     mutations,

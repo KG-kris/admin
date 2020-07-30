@@ -1,61 +1,67 @@
 <template>
   <div>
     <el-dialog :title="info.title" :visible.sync="info.show">
-      <el-form :model="form">
-        <el-form-item label="活动名称" label-width="80px">
+      <el-form :model="form" label-width="80px" >
+        <el-form-item label="活动名称" >
           <el-input v-model="form.title"></el-input>
         </el-form-item>
-        <el-form-item label="活动期限" label-width="80px">
+        <el-form-item label="活动期限">
           <el-date-picker
-            v-model="arr"
-            type="daterange"
+            v-model="time"
+            type="datetimerange"
             range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
-            :change="change(arr)"
           ></el-date-picker>
         </el-form-item>
-        <el-form-item label="一级分类" label-width="80px">
-          <el-select v-model="form.first_cateid" placeholder="请选择" @change="getFirstCate">
-            <el-option label="---请选择---" disabled value></el-option>
+
+        <el-form-item label="一级分类">
+          <el-select v-model="form.first_cateid" @change="changeFirst()">
+            <el-option label="请选择" value disabled></el-option>
             <el-option
-              v-for="item in classifylist"
+              v-for="item in cateList"
               :key="item.id"
               :label="item.catename"
               :value="item.id"
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="二级分类" label-width="80px">
-          <el-select v-model="form.second_cateid" placeholder="请选择" @change="getPro">
-            <el-option label="---请选择---" disabled value></el-option>
+        <el-form-item label="二级分类">
+          <el-select v-model="form.second_cateid" @change="changeSecondId">
+            <el-option label="请选择" value disabled></el-option>
             <el-option
-              v-for="item in cateChildren"
+              v-for="item in secondCateArr"
               :key="item.id"
               :label="item.catename"
               :value="item.id"
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="商品" label-width="80px">
-          <el-select v-model="form.goodsid" placeholder="请选择">
-            <el-option label="---请选择---" disabled value></el-option>
+        <el-form-item label="商品">
+          <el-select v-model="form.goodsid">
+            <el-option label="请选择" value disabled></el-option>
             <el-option
-              v-for="item in goods"
+              v-for="item in goodsList"
               :key="item.id"
               :label="item.goodsname"
               :value="item.id"
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="状态" label-width="80px">
-          <el-switch v-model="form.status" :active-value="1" :inactive-value="2"></el-switch>
+        <el-form-item label="状态">
+          <el-switch
+            active-color="#13ce66"
+            v-model="form.status"
+            :active-value="1"
+            :inactive-value="2"
+          ></el-switch>
         </el-form-item>
       </el-form>
+
       <div slot="footer" class="dialog-footer">
-        <el-button @click="cancel()">取 消</el-button>
-        <el-button type="primary" @click="add()" v-if="info.isAdd">确 定</el-button>
-        <el-button type="primary" @click="update()" v-else>修 改</el-button>
+        <el-button @click="cancel">取 消</el-button>
+        <el-button type="primary" @click="add" v-if="!info.isEdit">添 加</el-button>
+        <el-button type="primary" @click="update" v-else>修 改</el-button>
       </div>
     </el-dialog>
   </div>
@@ -63,129 +69,127 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 import {
-  requestActivityAdd,
-  requestActivityDetail,
-  requestActivityUpdate,
+  requestSeckillAdd,
+  requestSeckillDetail,
+  requestSeckillUpdate
 } from "../../../util/request";
 import { successAlert, warningAlert } from "../../../util/alert";
 export default {
   props: ["info"],
-  components: {},
   computed: {
     ...mapGetters({
-      classifylist: "cate/list",
-      prolist: "goods/list",
-      list: "seckill/list",
-    }),
+      menuList: "menu/list",
+      cateList:"cate/list",
+      secondList:"cate/secondList",
+      goodsList:"goods/list"
+    })
   },
+  components: {},
   data() {
     return {
-      arr: [],
-      cateChildren: [],
-      goods: [],
+      time: [],
       form: {
-        title: "",
-        begintime: null,
-        endtime: null,
         first_cateid: "",
         second_cateid: "",
+        title: "",
+        begintime: "",
+        endtime: "",
         goodsid: "",
-        status: 1,
+        status: 1
       },
+      secondCateArr:[]
+      
     };
   },
   methods: {
     ...mapActions({
-      requestCateList: "cate/requestCateList",
-      requestGoodsList: "goods/requestGoodsList",
-      requestList: "seckill/requestActivityList",
+      //一级分类
+      requestCateList: "cate/requestList",
+      requestGoodsList:"goods/requestList",
+      requestSeckillList:"seckill/requestList"
     }),
+    //修改了一级分类
+    changeFirst() {
+       let index = this.cateList.findIndex(
+        (item) => item.id == this.form.first_cateid
+      );
+      this.secondCateArr = this.cateList[index].children;
+      //传了true,second_cateid就不置空；没传就置空
+      if(!bool){
+         this.form.second_cateid = "";
+      }
+    },
+    //修改了二级分类
+    changeSecondId(){
+      this.requestGoodsList({fid:this.form.first_cateid,sid:this.form.second_cateid})
+    },
+    //重置数据
     empty() {
       this.form = {
-        title: "",
-        begintime: null,
-        endtime: null,
         first_cateid: "",
         second_cateid: "",
+        title: "",
+        begintime: "",
+        endtime: "",
         goodsid: "",
-        status: 1,
-      };
-      this.arr = [];
-      this.cateChildren = [];
-      this.goods = [];
+        status: 1
+      }
+      this.time = [];
     },
+    //取消
     cancel() {
       this.info.show = false;
-      if (!this.info.isAdd) {
+      if (this.info.isEdit) {
         this.empty();
       }
     },
-    change(arr) {
-      this.form.begintime = new Date(arr[0]).getTime();
-      this.form.endtime = new Date(arr[1]).getTime();
-    },
-    //获取二级分类
-    getFirstCate(id) {
-      this.classifylist.forEach((item) => {
-        if (item.id == id) {
-          this.cateChildren = item.children;
-        }
-      });
-    },
-    //获取商品
-    getPro() {
-      this.prolist.forEach((item) => {
-        if (
-          item.first_cateid == this.form.first_cateid &&
-          item.second_cateid == this.form.second_cateid
-        ) {
-          this.goods.push(item);
-        }
-      });
-    },
+    //添加
     add() {
-      requestActivityAdd(this.form).then((res) => {
+      this.form.begintime=new Date(this.time[0]).getTime()
+      this.form.endtime=new Date(this.time[1]).getTime()
+      requestSeckillAdd(this.form).then(res => {
         if (res.data.code == 200) {
-          successAlert(res.data.msg);
-          this.cancel();
           this.empty();
-          this.requestList();
+          this.cancel();
+          successAlert("添加成功");
+          this.requestSeckillList();
         } else {
           warningAlert(res.data.msg);
         }
       });
     },
+    //获取详情
     getDetail(id) {
-      requestActivityDetail({ id: id }).then((res) => {
+      requestSeckillDetail({ id }).then(res => {
         this.form = res.data.list;
         this.form.id = id;
-        this.$set(this.arr, 0, new Date(Number.parseInt(this.form.begintime)));
-        this.$set(this.arr, 1, new Date(Number.parseInt(this.form.endtime)));
+        this.time=[new Date(parseFloat(this.form.begintime)),new Date(parseFloat(this.form.endtime))]
+        this.requestCateList({ istree: true, pid: this.form.first_cateid });
+        this.requestGoodsList({fid:this.form.first_cateid,sid:this.form.second_cateid})
       });
     },
+    //修改
     update() {
-      this.form.begintime = new Date(this.arr[0]).getTime();
-      this.form.endtime = new Date(this.arr[1]).getTime();
-      requestActivityUpdate(this.form).then((res) => {
+     this.form.begintime=new Date(this.time[0]).getTime()
+      this.form.endtime=new Date(this.time[1]).getTime()
+      requestSeckillUpdate(this.form).then(res => {
         if (res.data.code == 200) {
-          successAlert(res.data.msg);
-          this.cancel();
           this.empty();
-          this.requestList();
+          this.cancel();
+          successAlert("更新成功");
+          this.requestSeckillList();
         } else {
           warningAlert(res.data.msg);
         }
       });
-    },
+    }
   },
   mounted() {
-    if (this.classifylist.length == 0) {
-      this.requestCateList();
+    if (this.cateList.length == 0) {
+      this.requestCateList({ istree: true });
     }
-    if (this.prolist.length == 0) {
-      this.requestGoodsList();
-    }
-  },
+
+  }
 };
 </script>
 <style scoped>

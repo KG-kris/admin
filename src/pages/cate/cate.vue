@@ -1,9 +1,8 @@
 <template>
   <div>
-    <el-button type="primary" @click="add">添加</el-button>
+    <el-button type="primary" @click="add">添 加</el-button>
     <!-- 添加弹框 -->
     <v-add :info="info" ref="add"></v-add>
-
     <!-- 列表 -->
     <v-list @edit="edit"></v-list>
   </div>

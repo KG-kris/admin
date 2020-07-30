@@ -1,25 +1,25 @@
-import { requestActivityList } from "../../util/request"
-
+import {requestSeckillList} from "../../util/request"
 const state = {
     list: []
+
 }
 
 const mutations = {
-    changeAcyivityList(state, arr) {
-        state.list = arr
+    changeList(state, list) {
+        state.list = list
     }
 }
 
 const actions = {
-    requestActivityList(context) {
-        requestActivityList().then(res => {
-            context.commit("changeAcyivityList", res.data.list)
+    requestList({ commit }) {
+        requestSeckillList().then(res=>{
+            commit("changeList",res.data.list)
         })
     }
 }
 
 const getters = {
-    list(state) {
+    list(state){
         return state.list
     }
 }

@@ -3,7 +3,7 @@
     <el-dialog :title="info.title" :visible.sync="info.show" @opened="createEditor">
       <el-form :model="form">
         <el-form-item label="一级分类" label-width="80px">
-          <el-select v-model="form.first_cateid" @change="changeFirstCateId">
+          <el-select v-model="form.first_cateid" @change="changeFirstCateId()">
             <el-option label="请选择" value disabled></el-option>
             <!-- 动态数据 -->
             <el-option
@@ -48,7 +48,7 @@
           </el-upload>
         </el-form-item>
         <el-form-item label="商品规格" label-width="80px">
-          <el-select v-model="form.specsid" @change="changeSpecsId">
+          <el-select v-model="form.specsid" @change="changeSpecsId()">
             <el-option label="请选择" value disabled></el-option>
             <el-option
               v-for="item in specList"
@@ -229,8 +229,10 @@ export default {
     },
     //添加
     add() {
+     
       this.form.description=this.editor.txt.html();
       this.form.specsattr=JSON.stringify(this.form.specsattr)
+
       //发起添加请求
       requestGoodsAdd(this.form).then((res) => {
         if (res.data.code == 200) {
@@ -287,12 +289,15 @@ export default {
 .add >>> .el-form-item__content {
   display: flex !important;
 }
+
 .add >>> .el-input {
   flex: 1;
 }
+
 .add >>> .el-button {
   width: auto;
 }
+
 // 穿透
 .add >>> .el-upload {
   border: 1px dashed #d9d9d9 !important;
@@ -301,9 +306,11 @@ export default {
   position: relative;
   overflow: hidden;
 }
+
 .add >>> .el-upload:hover {
   border: 1px dashed #409eff !important;
 }
+
 .avatar-uploader-icon {
   font-size: 28px;
   color: #8c939d;
@@ -317,10 +324,5 @@ export default {
   width: 178px;
   height: 178px;
   display: block;
-}
-#desc{
-  display:inline-block;
-  width:100%;
-  overflow hidden
 }
 </style>

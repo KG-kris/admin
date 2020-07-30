@@ -6,8 +6,10 @@ Vue.use(Router)
 // 路由独享
 function havePower(url){
   return store.state.user.menus_url.some(i=>i==url)
+  // return trues
 }
-let router = new Router({
+
+let router=new Router({
   routes: [
     {
       path:"/login",
@@ -96,15 +98,16 @@ let router = new Router({
         },
         {
           path:"",
-          redirect:"/login"
+          redirect:"home"
         }
       ]
     },
   ]
 })
 
-// //登录拦截
+//登录拦截
 router.beforeEach((to,from,next)=>{
+  // next()
   //如果前往登录页面，next()
   if(to.path==="/login"){
     next()
@@ -116,5 +119,6 @@ router.beforeEach((to,from,next)=>{
   }
   next("/login")
 })
+
 
 export default router

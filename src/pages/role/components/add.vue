@@ -7,6 +7,7 @@
         </el-form-item>
 
         <el-form-item label="角色权限" label-width="80px">
+          <!-- :default-checked-keys="[1,5]" 默认选中的数组 -->
           <el-tree
             :data="menuList"
             show-checkbox
@@ -61,7 +62,7 @@ export default {
     };
   },
   mounted() {
-    //没有请求，发请求
+    //如果之前menu的list没有请求，就发请求，请求你过了，就不发了
     if (this.menuList.length === 0) {
       this.requestMenuList();
     }

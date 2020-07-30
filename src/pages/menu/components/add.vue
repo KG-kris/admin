@@ -77,6 +77,7 @@ export default {
         "/goods",
         "/banner",
         "/seckill",
+        "/member"
       ],
       form: {
         pid: 0,

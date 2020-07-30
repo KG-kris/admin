@@ -41,11 +41,6 @@ const actions = {
             context.commit("changeList", res.data.list)
         })
     },
-    requestAllPro(context) {
-        requestProList().then(res => {
-            context.commit("changeProList", res.data.list)
-        })
-    },
     //获取总的数量
     requestTotal(context) {
         requestGoodsCount().then(res => {

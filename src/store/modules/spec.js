@@ -21,14 +21,13 @@ const mutations = {
     changeTotal(state, num) {
         state.total = num;
     },
-    //修改当前页码˚
+    //修改当前页码
     changePage(state, page) {
         state.page = page
     }
 }
 const actions = {
     //获取列表数据
-    //调用这个action,如果要分页，就不用传参；如果要取所有的数据，就传递一个true
     requestList(context, bool) {
         var params = {}
         if (bool) {

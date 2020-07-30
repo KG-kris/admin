@@ -10,7 +10,7 @@
       </el-table-column>
       <el-table-column label="状态">
         <template slot-scope="scope">
-          <el-button v-if="scope.row.status==1" type="primary">启用</el-button>
+          <el-button v-if="scope.row.status==1" type="success">启用</el-button>
           <el-button v-else type="info">禁用</el-button>
         </template>
       </el-table-column>

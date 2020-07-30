@@ -1,57 +1,48 @@
 <template>
   <div>
-    <el-table :data="list" style="width: 100%" border>
-      <el-table-column prop="id" label="用户编号" width="180"></el-table-column>
-      <el-table-column prop="nickname" label="昵称" width="180"></el-table-column>
-      <el-table-column prop="phone" label="手机号" width="180"></el-table-column>
-      <el-table-column label="状态">
-        <template slot-scope="scope">
-          <el-button type="primary" v-if="scope.row.status==1">启用</el-button>
-          <el-button type="info" v-else>禁用</el-button>
-        </template>
-      </el-table-column>
-      <el-table-column label="操作">
-        <template slot-scope="scope">
-          <el-button type="primary" @click="edit(scope.row.uid)">修改</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    <v-update :info="info" ref="update"></v-update>
+    <!-- 添加 -->
+    <v-add :info="info" ref="add"></v-add>
+    <!-- 列表 -->
+    <v-list @edit='edit($event)'></v-list>
   </div>
 </template>
+
 <script>
-import { mapGetters, mapActions } from "vuex";
-import vUpdate from "./components/list";
+import vAdd from "./components/add";
+import vList from "./components/list";
 export default {
   components: {
-    vUpdate,
-  },
-  computed: {
-    ...mapGetters({
-      list: "member/list",
-    }),
+    vAdd,
+    vList
   },
   data() {
     return {
+      //添加弹框的信息
       info: {
-        show: false,
-        uid: null,
-      },
+        show: false,//是否展示
+        isEdit: false,//是否是编辑
+        title: "添加角色",//title
+      }
     };
   },
-  methods: {
-    ...mapActions({
-      requestList: "member/requestVipList",
-    }),
-    edit(id) {
-      this.info.show = true;
-      this.$refs.update.getDetail(id)
+  methods:{
+    //添加
+    add(){
+      this.info.show=true;
+      this.info.title="添加角色"
+      this.info.isEdit=false
     },
-  },
-  mounted() {
-    this.requestList();
-  },
+    //编辑
+    edit(id){
+      this.info.show=true;
+      this.info.title="编辑角色";
+      this.info.isEdit=true
+      this.$refs.add.getDetail(id)
+    }
+
+  }
 };
 </script>
+
 <style scoped>
 </style>

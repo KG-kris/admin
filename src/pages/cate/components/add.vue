@@ -15,18 +15,6 @@
           <el-input v-model="form.catename" autocomplete="off"></el-input>
         </el-form-item>
 
-        <!-- <el-form-item label="图片" label-width="80px" v-if="form.pid!==0">
-          <el-upload
-            class="avatar-uploader"
-            action="#"
-            :show-file-list="false"
-            :on-change="changeImg"
-          >
-            <img v-if="imageUrl" :src="imageUrl" class="avatar" />
-            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-          </el-upload>
-        </el-form-item>-->
-
         <el-form-item label="图片" label-width="80px" v-if="form.pid!==0">
           <div class="box-img">
             <h3>+</h3>

@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-table :data="list" style="width: 100%">
-      <el-table-column prop="id" label="商品编号" width="80"></el-table-column>
+      <el-table-column prop="id" label="商品编号" width="180"></el-table-column>
       <el-table-column prop="goodsname" label="商品名称" width="180"></el-table-column>
       <el-table-column label="图片" width="180">
         <template slot-scope="scope">
@@ -22,7 +22,7 @@
       </el-table-column>
       <el-table-column label="状态">
         <template slot-scope="scope">
-          <el-button v-if="scope.row.status==1" type="primary">启用</el-button>
+          <el-button v-if="scope.row.status==1" type="success">启用</el-button>
           <el-button v-else type="info">禁用</el-button>
         </template>
       </el-table-column>

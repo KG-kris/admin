@@ -17,14 +17,14 @@
 
       <el-table-column label="状态">
         <template slot-scope="scope">
-          <el-button type="primary" v-if="scope.row.status==1">启用</el-button>
+          <el-button type="success" v-if="scope.row.status==1">启用</el-button>
           <el-button type="info" v-else>禁用</el-button>
         </template>
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button type="primary" @click="edit(scope.row.id)">编辑</el-button>
-          <del-btn type="danger" @confirm="del(scope.row.id)">删除</del-btn>
+          <el-button type="primary" @click="edit(scope.row.id)">编 辑</el-button>
+          <del-btn type="danger" @confirm="del(scope.row.id)">删 除</del-btn>
         </template>
       </el-table-column>
     </el-table>
