@@ -66,5 +66,15 @@
     "> 1%",
     "last 2 versions",
     "not ie <= 8"
-  ]
+  ],
+  "main": ".postcssrc.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KG-kris/admin.git"
+  },
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/KG-kris/admin/issues"
+  },
+  "homepage": "https://github.com/KG-kris/admin#readme"
 }
