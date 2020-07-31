@@ -1,8 +1,8 @@
 <template>
   <div>
     <el-dialog :title="info.title" :visible.sync="info.show">
-      <el-form :model="form">
-        <el-form-item label="菜单名称" label-width="80px">
+      <el-form :model="form" :rules="rules">
+        <el-form-item label="菜单名称" label-width="80px" prop="title">
           <el-input v-model="form.title" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="上级菜单" label-width="80px">
@@ -87,6 +87,11 @@ export default {
         url: "",
         status: 1,
       },
+        rules: {
+        title: [
+          { required: true, message: "名称不能为空", trigger: "blur" }
+        ]
+      }
     };
   },
   methods: {
@@ -113,6 +118,10 @@ export default {
     },
     //点击了添加按钮
     add() {
+      if (this.form.title === "") {
+        warningAlert("菜单名称不能为空");
+        return;
+      }
       requestMenuAdd(this.form).then((res) => {
         if (res.data.code == 200) {
           successAlert(res.data.msg);
@@ -136,6 +145,10 @@ export default {
     },
     //修改
     update() {
+       if (this.form.title === "") {
+        warningAlert("菜单名称不能为空");
+        return;
+      }
       requestMenuUpdate(this.form).then((res) => {
         if(res.data.code==200){
           successAlert(res.data.msg)

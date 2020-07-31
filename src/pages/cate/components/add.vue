@@ -1,7 +1,7 @@
 <template>
   <div class="add">
     <el-dialog :title="info.title" :visible.sync="info.show">
-      <el-form :model="form">
+      <el-form :model="form" :rule="rules">
         <el-form-item label="上级分类" label-width="80px">
           <el-select v-model="form.pid">
             <el-option label="--请选择--" value disabled></el-option>
@@ -11,7 +11,7 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="分类名称" label-width="80px">
+        <el-form-item label="分类名称" label-width="80px" prop="catename">
           <el-input v-model="form.catename" autocomplete="off"></el-input>
         </el-form-item>
 
@@ -55,13 +55,15 @@ export default {
     return {
       //上传完成的时候图片的地址
       imageUrl: "",
-
       form: {
         pid: 0,
         catename: "",
         img: null,
         status: 1,
       },
+      rules:{
+        catename: [{ required: true, message: "请输入分类名称", trigger: "blur" }]
+      }
     };
   },
   methods: {
@@ -71,7 +73,6 @@ export default {
 
     //修改了图片
     changeImg(e) {
-      
       //上传的文件不能超过2M
       if (e.size > 2 * 1024 * 1024) {
         warningAlert("上传的图片不能超过2M");
@@ -84,8 +85,7 @@ export default {
         warningAlert("上传文件必须是图片");
         return;
       }
-
-      //file是上传的文件
+      //上传的文件
       var file = e.raw;
       //生成一个URL地址，赋值给imageUrl,展示出来
       this.imageUrl = URL.createObjectURL(file);
@@ -108,8 +108,6 @@ export default {
         warningAlert("上传文件必须是图片");
         return;
       }
-
-
       //生成一个URL地址，赋值给imageUrl,展示出来
       this.imageUrl = URL.createObjectURL(file);
       this.form.img = file;
@@ -134,6 +132,14 @@ export default {
     },
     //点击了添加按钮
     add() {
+      if (this.form.catename === "") {
+        warningAlert("商品名不能为空");
+        return;
+      }
+      if (this.form.img === null) {
+        warningAlert("请上传图片");
+        return;
+      }
       requestCateAdd(this.form).then((res) => {
         if (res.data.code == 200) {
           successAlert(res.data.msg);
@@ -158,6 +164,14 @@ export default {
     },
     //修改
     update() {
+      if (this.form.catename === "") {
+        warningAlert("商品名不能为空");
+        return;
+      }
+      if (this.form.img === null) {
+        warningAlert("请上传图片");
+        return;
+      }
       requestCateUpdate(this.form).then((res) => {
         if (res.data.code == 200) {
           successAlert(res.data.msg);

@@ -29,7 +29,7 @@ export default {
       "changeUser":"changeUser"
     }),
       login(){
-          this.$router.push("/index")
+          // this.$router.push("/index")
           requestLogin(this.user).then(res=>{
             if(res.data.code===200){
               //登录成功
@@ -37,7 +37,8 @@ export default {
               //vuex保存了用户信息
               this.changeUser(res.data.list)
               //跳转页面
-              this.$router.push("/home")
+              // this.$router.push("/home")
+              this.$router.push({ path: this.redirect || '/home' }, () => {}, () => {})
             }else{
               warningAlert(res.data.msg)
             }

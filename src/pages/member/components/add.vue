@@ -85,7 +85,18 @@ export default {
     //添加
     add() {
       this.form.menus = this.$refs.tree.getCheckedKeys().join(",");
-
+        if (this.form.phone === "") {
+        warningAlert("角色名称不能为空");
+        return;
+      }
+        if (this.form.nickname === "") {
+        warningAlert("手机号不能为空");
+        return;
+      }
+      if ( this.form.password === "") {
+        warningAlert("密码不能为空");
+        return;
+      }
       requestRoleAdd(this.form).then(res => {
         if (res.data.code == 200) {
           this.empty();
@@ -106,7 +117,15 @@ export default {
     },
     //修改
     update() {
-      if (this.form.password === "") {
+        if (this.form.phone === "") {
+        warningAlert("角色名称不能为空");
+        return;
+      }
+        if (this.form.nickname === "") {
+        warningAlert("手机号不能为空");
+        return;
+      }
+      if ( this.form.password === "") {
         warningAlert("密码不能为空");
         return;
       }

@@ -1,13 +1,12 @@
 <template>
   <div>
     <el-dialog :title="info.title" :visible.sync="info.show">
-      <el-form :model="form">
-        <el-form-item label="角色名称" label-width="80px">
+      <el-form :model="form" :rules="rules">
+        <el-form-item label="角色名称" label-width="80px" prop="rolename">
           <el-input v-model="form.rolename" autocomplete="off"></el-input>
         </el-form-item>
 
         <el-form-item label="角色权限" label-width="80px">
-          <!-- :default-checked-keys="[1,5]" 默认选中的数组 -->
           <el-tree
             :data="menuList"
             show-checkbox
@@ -59,10 +58,12 @@ export default {
         children: "children",
         label: "title",
       },
+      rules: {
+        rolename: [{ required: true, message: "角色名称不能为空", trigger: "blur" }],
+      },
     };
   },
   mounted() {
-    //如果之前menu的list没有请求，就发请求，请求你过了，就不发了
     if (this.menuList.length === 0) {
       this.requestMenuList();
     }
@@ -93,6 +94,11 @@ export default {
     add() {
       //获取tree的key赋值给form.menus
       this.form.menus = JSON.stringify(this.$refs.tree.getCheckedKeys());
+      //判断输入是否为空
+       if (this.form.rolename === "") {
+        warningAlert("角色名称不能为空");
+        return;
+      }
       //发起添加角色的请求
       requestRoleAdd(this.form).then((res) => {
         if (res.data.code == 200) {
@@ -121,6 +127,10 @@ export default {
     update() {
       //获取tree的key赋值给form.menus
       this.form.menus = JSON.stringify(this.$refs.tree.getCheckedKeys());
+      if (this.form.rolename === "") {
+        warningAlert("角色名称不能为空");
+        return;
+      }
       requestRoleUpdate(this.form).then((res) => {
         if (res.data.code == 200) {
           successAlert("修改成功");

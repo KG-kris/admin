@@ -1,8 +1,8 @@
 <template>
   <div>
     <el-dialog :title="info.title" :visible.sync="info.show">
-      <el-form :model="form" label-width="80px" >
-        <el-form-item label="活动名称" >
+      <el-form :model="form" label-width="80px" :rules="rules" >
+        <el-form-item label="活动名称" prop="title">
           <el-input v-model="form.title"></el-input>
         </el-form-item>
         <el-form-item label="活动期限">
@@ -97,6 +97,11 @@ export default {
         goodsid: "",
         status: 1
       },
+      rulse : {
+        title: [
+          { required: true, message: "活动名不能为空", trigger: "blur" }
+        ]
+      },
       secondCateArr:[]
       
     };
@@ -108,18 +113,17 @@ export default {
       requestGoodsList:"goods/requestList",
       requestSeckillList:"seckill/requestList"
     }),
-    //修改了一级分类
+    //修改一级分类
     changeFirst() {
        let index = this.cateList.findIndex(
         (item) => item.id == this.form.first_cateid
       );
       this.secondCateArr = this.cateList[index].children;
-      //传了true,second_cateid就不置空；没传就置空
       if(!bool){
          this.form.second_cateid = "";
       }
     },
-    //修改了二级分类
+    //修改二级分类
     changeSecondId(){
       this.requestGoodsList({fid:this.form.first_cateid,sid:this.form.second_cateid})
     },
@@ -147,6 +151,10 @@ export default {
     add() {
       this.form.begintime=new Date(this.time[0]).getTime()
       this.form.endtime=new Date(this.time[1]).getTime()
+       if (this.form.title === "") {
+        warningAlert("请输入活动名称");
+        return;
+      }
       requestSeckillAdd(this.form).then(res => {
         if (res.data.code == 200) {
           this.empty();
@@ -188,7 +196,6 @@ export default {
     if (this.cateList.length == 0) {
       this.requestCateList({ istree: true });
     }
-
   }
 };
 </script>

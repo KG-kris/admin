@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-dialog :title="info.title" :visible.sync="info.show">
-      <el-form :model="form">
+      <el-form :model="form" :rules="rules">
         <el-form-item label="所属角色" label-width="80px">
           <el-select v-model="form.roleid">
             <el-option label="--请选择--" value disabled></el-option>
@@ -10,10 +10,10 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="用户名" label-width="80px">
+        <el-form-item label="用户名" label-width="80px" prop="username">
           <el-input v-model="form.username"></el-input>
         </el-form-item>
-        <el-form-item label="密码" label-width="80px">
+        <el-form-item label="密码" label-width="80px" prop="password">
           <el-input v-model="form.password" show-password></el-input>
         </el-form-item>
 
@@ -54,11 +54,13 @@ export default {
         password:"",
         status: 1,
       },
-     
+     rules: {
+        username: [{ required: true, message: "用户名不能为空", trigger: "blur" }],
+        password: [{ required: true, message: "密码不能为空", trigger: "blur" }]
+      }
     };
   },
   mounted() {
-    //如果之前menu的list没有请求，就发请求，请求你过了，就不发了
     if (this.roleList.length === 0) {
       this.requestRoleList();
     }
@@ -87,7 +89,14 @@ export default {
     },
     //添加
     add() {
-      
+       if (this.form.username === "") {
+        warningAlert("用户名不能为空");
+        return;
+      }
+      if ( this.form.password === "") {
+        warningAlert("密码不能为空");
+        return;
+      }
       //发起添加请求
       requestManageAdd(this.form).then((res) => {
         if (res.data.code == 200) {
@@ -115,7 +124,14 @@ export default {
     },
     //点击了修改
     update() {
-     
+        if (this.form.username === "") {
+        warningAlert("用户名不能为空");
+        return;
+      }
+      if ( this.form.password === "") {
+        warningAlert("密码不能为空");
+        return;
+      }
       requestManageUpdate(this.form).then((res) => {
         if (res.data.code == 200) {
           successAlert("修改成功");

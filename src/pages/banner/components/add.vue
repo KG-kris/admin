@@ -39,15 +39,15 @@ import { mapGetters, mapActions } from "vuex";
 import {
   requestBannerAdd,
   requestBannerDetail,
-  requestBannerUpdate
+  requestBannerUpdate,
 } from "../../../util/request";
 import { successAlert, warningAlert } from "../../../util/alert";
 export default {
   props: ["info"],
   computed: {
     ...mapGetters({
-      menuList: "menu/list"
-    })
+      menuList: "menu/list",
+    }),
   },
   components: {},
   data() {
@@ -56,13 +56,11 @@ export default {
       form: {
         title: "",
         img: null,
-        status: 1
+        status: 1,
       },
       rules: {
-        title: [
-          { required: true, message: "标题不能为空", trigger: "blur" }
-        ]
-      }
+        title: [{ required: true, message: "标题不能为空", trigger: "blur" }],
+      },
     };
   },
   methods: {
@@ -79,7 +77,7 @@ export default {
       this.form = {
         title: "",
         img: null,
-        status: 1
+        status: 1,
       };
       this.imgUrl = "";
     },
@@ -96,8 +94,16 @@ export default {
       for (var i in this.form) {
         data.append(i, this.form[i]);
       }
-      console.log(data)
-      requestBannerAdd(data).then(res => {
+      if (this.form.title === "") {
+        warningAlert("标题不能为空");
+        return;
+      }
+      if (this.form.img === null) {
+        warningAlert("请上传图片");
+        return;
+      }
+      console.log(data);
+      requestBannerAdd(data).then((res) => {
         if (res.data.code == 200) {
           this.empty();
           this.cancel();
@@ -110,10 +116,10 @@ export default {
     },
     //获取详情
     getDetail(id) {
-      requestBannerDetail({ id }).then(res => {
+      requestBannerDetail({ id }).then((res) => {
         this.form = res.data.list;
         this.form.id = id;
-        this.imgUrl=this.$imgPre+this.form.img;
+        this.imgUrl = this.$imgPre + this.form.img;
       });
     },
     //修改
@@ -122,7 +128,15 @@ export default {
       for (var i in this.form) {
         data.append(i, this.form[i]);
       }
-      requestRoleUpdate(data).then(res => {
+      if (this.form.title === "") {
+        warningAlert("标题不能为空");
+        return;
+      }
+      if (this.form.img === null) {
+        warningAlert("请上传图片");
+        return;
+      }
+      requestBannerUpdate(data).then((res) => {
         if (res.data.code == 200) {
           this.empty();
           this.cancel();
@@ -132,11 +146,9 @@ export default {
           warningAlert(res.data.msg);
         }
       });
-    }
+    },
   },
-  mounted() {
-   
-  }
+  mounted() {},
 };
 </script>
 <style scoped>

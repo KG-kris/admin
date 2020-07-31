@@ -1,8 +1,8 @@
 <template>
   <div class="add">
     <el-dialog :title="info.title" :visible.sync="info.show">
-      <el-form :model="form">
-        <el-form-item label="规格名称" label-width="80px">
+      <el-form :model="form" :rules="rules">
+        <el-form-item label="规格名称" label-width="80px" prop="specsname">
           <el-input v-model="form.specsname"></el-input>
         </el-form-item>
         <el-form-item v-for="(item,index) in attrArr" :key="index" label="规格属性" label-width="80px">
@@ -46,13 +46,17 @@ export default {
           value: "",
         },
       ],
-
       //提交给后端的数据
       form: {
         specsname: "",
         attrs: "",
         status: 1,
       },
+      rules: {
+        specsname: [
+          { required: true, message: "规格名称不能为空", trigger: "blur" }
+        ]
+      }
     };
   },
   mounted() {
@@ -99,10 +103,9 @@ export default {
     //添加
     add() {
       if (this.attrArr.some((item) => item.value == "")) {
-        warningAlert("属性规格均不能为空");
+        warningAlert("规格与属性名均不能为空");
         return;
       }
-
       this.form.attrs = JSON.stringify(this.attrArr.map((item) => item.value));
       //发起添加请求
       requestSpecAdd(this.form).then((res) => {
@@ -137,7 +140,6 @@ export default {
         warningAlert("属性规格均不能为空");
         return;
       }
-
       this.form.attrs = JSON.stringify(this.attrArr.map((item) => item.value));
       requestSpecUpdate(this.form).then((res) => {
         if (res.data.code == 200) {

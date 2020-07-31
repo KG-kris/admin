@@ -1,8 +1,8 @@
 <template>
   <div class="add">
     <el-dialog :title="info.title" :visible.sync="info.show" @opened="createEditor">
-      <el-form :model="form">
-        <el-form-item label="一级分类" label-width="80px">
+      <el-form :model="form" :rules="rules">
+        <el-form-item label="一级分类" label-width="80px" prop="first_cateid">
           <el-select v-model="form.first_cateid" @change="changeFirstCateId()">
             <el-option label="请选择" value disabled></el-option>
             <!-- 动态数据 -->
@@ -27,13 +27,13 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="商品名称" label-width="80px">
+        <el-form-item label="商品名称" label-width="80px" prop="goodsname">
           <el-input v-model="form.goodsname"></el-input>
         </el-form-item>
-        <el-form-item label="价格" label-width="80px">
+        <el-form-item label="价格" label-width="80px" prop="price">
           <el-input v-model="form.price"></el-input>
         </el-form-item>
-        <el-form-item label="市场价格" label-width="80px">
+        <el-form-item label="市场价格" label-width="80px" prop="market_price">
           <el-input v-model="form.market_price"></el-input>
         </el-form-item>
         <el-form-item label="图片" label-width="80px">
@@ -135,6 +135,18 @@ export default {
         status: 1,
         description: "",
       },
+      rules: {
+        goodsname: [
+          { required: true, message: "商品名不能为空", trigger: "blur" }
+        ],
+         price: [
+          { required: true, message: "请输入商品价格", trigger: "blur" }
+        ], 
+        market_price: [
+          { required: true, message: "请输入市场价", trigger: "blur" }
+        ],
+       
+      }
     };
   },
   mounted() {
@@ -162,7 +174,6 @@ export default {
         (item) => item.id == this.form.first_cateid
       );
       this.secondCateArr = this.cateList[index].children;
-      //传了true,second_cateid就不置空；没传就置空
       if(!bool){
          this.form.second_cateid = "";
       }
@@ -229,10 +240,12 @@ export default {
     },
     //添加
     add() {
-     
       this.form.description=this.editor.txt.html();
       this.form.specsattr=JSON.stringify(this.form.specsattr)
-
+      if (this.form.goodsname === "") {
+        warningAlert("商品名不能为空");
+        return;
+      }
       //发起添加请求
       requestGoodsAdd(this.form).then((res) => {
         if (res.data.code == 200) {
@@ -270,7 +283,10 @@ export default {
     update() {
        this.form.description=this.editor.txt.html();
       this.form.specsattr=JSON.stringify(this.form.specsattr)
-
+      if (this.form.goodsname === "") {
+        warningAlert("商品名不能为空");
+        return;
+      }
       requestGoodsUpdate(this.form).then((res) => {
         if (res.data.code == 200) {
           successAlert("修改成功");
@@ -324,5 +340,8 @@ export default {
   width: 178px;
   height: 178px;
   display: block;
+}
+#desc{
+  overflow hidden
 }
 </style>
